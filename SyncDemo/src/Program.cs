@@ -1,17 +1,17 @@
 ﻿
+using SyncDemo.src;
 
-internal class Program
+namespace SyncDemo
 {
-
-    // Accept four arguments: 'source' path, 'replica' path, 'log' file path and 'interval'(seconds)
-    // Timer for synchronization (receives 'interval') 
-    // Synchronization - one way 'source' to 'replica'
-    // Logging - 
-
-    private static void Main(string[] args)
+    internal class Program
     {
 
+        private static void Main(string[] args)
+        {
+
+
+        }
+
+
     }
-
-
 }
