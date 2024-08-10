@@ -9,13 +9,11 @@
         {
             _folderSynchronization = folderSynchronization;
             _timer = new Timer(CallSync, null, TimeSpan.Zero, TimeSpan.FromSeconds(syncInterval));
-            Console.WriteLine($"Syncronization timer started with an interval of {syncInterval}");
         }
 
         private void CallSync(object? state)
         {
             _folderSynchronization.SynchronizeFolders();
         }
-
     }
 }

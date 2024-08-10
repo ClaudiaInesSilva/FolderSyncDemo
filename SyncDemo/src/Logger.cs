@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SyncDemo.src
+﻿namespace SyncDemo.src
 {
     public class Logger : ILogger
     {
@@ -17,7 +11,7 @@ namespace SyncDemo.src
 
         public void Log(string message)
         {
-            var logMessage = $"{DateTime.Now}: {message}\n";
+            var logMessage = $"[{DateTime.Now}] : {message}\n";
             try
             {
                 Console.WriteLine(logMessage);
@@ -25,7 +19,7 @@ namespace SyncDemo.src
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Failed to write to log file: {e.Message}");
+                Console.WriteLine($"LOG FILE ERROR - Failed to write to log file: {e.Message}");
             }
         }
     }

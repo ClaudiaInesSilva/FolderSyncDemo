@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SyncDemo.src
+﻿namespace SyncDemo.src
 {
     internal class CommandLine
     {
@@ -29,4 +27,3 @@ namespace SyncDemo.src
         }
     }
 }
-

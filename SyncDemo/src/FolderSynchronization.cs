@@ -24,7 +24,7 @@ namespace SyncDemo.src
                 if (!Directory.Exists(_replicaPath))
                 {
                     Directory.CreateDirectory(_replicaPath);
-                    var replicaCreatedMessage = $"Created Replica folder at {_replicaPath}";
+                    var replicaCreatedMessage = $"CREATE - Created Replica folder at {_replicaPath}";
                     Console.WriteLine(replicaCreatedMessage);
                     _logger.Log(replicaCreatedMessage);
                 }
@@ -63,13 +63,13 @@ namespace SyncDemo.src
                     }
                 }
 
-                var syncComplete = "Synchronization complete.";
+                var syncComplete = "INFO - Synchronization complete.";
                 Console.WriteLine(syncComplete);
                 _logger.Log(syncComplete);
             }
             catch (Exception ex)
             {
-                var syncError = $"Error during synchronization: {ex.Message}";
+                var syncError = $"ERROR - Error during synchronization: {ex.Message}";
                 Console.WriteLine(syncError);
                 _logger.Log(syncError);
             }

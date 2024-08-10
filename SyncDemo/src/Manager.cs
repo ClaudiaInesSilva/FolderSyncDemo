@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace SyncDemo.src
+﻿namespace SyncDemo.src
 {
     public class Manager
     {
@@ -17,14 +14,14 @@ namespace SyncDemo.src
             try
             {
                 File.Copy(sourcePath, destinationPath, true);
-                var message = $"Copied file from {sourcePath} to {destinationPath}";
+                var message = $"COPY - Copied file from {sourcePath} to {destinationPath}";
                 Console.WriteLine(message);
                 _logger.Log(message);
             }
             catch (Exception e)
             {
-                var errorMessage = $"Failed to copy file {sourcePath} to {destinationPath}: {e.Message}";
-                Console.WriteLine(errorMessage);
+                var errorMessage = $"ERROR - Failed to copy file {sourcePath} to {destinationPath}: {e.Message}";
+                Console.WriteLine($"{e.Message}");
                 _logger.Log(errorMessage);
             }
         }
@@ -34,17 +31,16 @@ namespace SyncDemo.src
             try
             {
                 File.Delete(path);
-                var message = $"Deleted file {path}";
+                var message = $"DELETE - Deleted file {path}";
                 Console.WriteLine(message);
                 _logger.Log(message);
             }
             catch (Exception e)
             {
-                var errorMessage = $"Failed to delete file {path}: {e.Message}";
+                var errorMessage = $"ERROR - Failed to delete file {path}: {e.Message}";
                 Console.WriteLine(errorMessage);
                 _logger.Log(errorMessage);
             }
         }
     }
 }
-
