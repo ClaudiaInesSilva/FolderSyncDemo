@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 
 namespace SyncDemo.src
 {
@@ -15,8 +9,7 @@ namespace SyncDemo.src
         private readonly Manager _manager;
         private readonly ILogger _logger;
 
-
-        public FolderSynchronization(string sourcePath,string replicaPath, Manager manager, ILogger logger)
+        public FolderSynchronization(string sourcePath, string replicaPath, Manager manager, ILogger logger)
         {
             _sourcePath = sourcePath;
             _replicaPath = replicaPath;
@@ -38,19 +31,25 @@ namespace SyncDemo.src
 
                 var sourceFiles = Directory.GetFiles(_sourcePath, "*", SearchOption.AllDirectories);
                 var replicaFiles = Directory.GetFiles(_replicaPath, "*", SearchOption.AllDirectories);
+
                 var sourceFilesSet = new HashSet<string>(sourceFiles);
                 var replicaFilesSet = new HashSet<string>(replicaFiles);
 
                 foreach (var sourceFile in sourceFiles)
                 {
                     var relativePath = Path.GetRelativePath(_sourcePath, sourceFile);
-                    var destinationFile = Path.Combine(_replicaPath, relativePath);
+                    var replicaFile = Path.Combine(_replicaPath, relativePath);
+                    var replicaDirectory = Path.GetDirectoryName(replicaFile);
 
-                    if (!replicaFilesSet.Contains(destinationFile) || !FileEquals(sourceFile, destinationFile))
+                    if (!Directory.Exists(replicaDirectory))
                     {
-                        _manager.CopyFile(sourceFile, destinationFile);
+                        Directory.CreateDirectory(replicaDirectory);
                     }
 
+                    if (!replicaFilesSet.Contains(replicaFile) || !FileEquals(sourceFile, replicaFile))
+                    {
+                        _manager.CopyFile(sourceFile, replicaFile);
+                    }
                 }
 
                 foreach (var replicaFile in replicaFiles)
@@ -64,10 +63,9 @@ namespace SyncDemo.src
                     }
                 }
 
-                var syncComplete = "Synchronization completed.";
+                var syncComplete = "Synchronization complete.";
                 Console.WriteLine(syncComplete);
                 _logger.Log(syncComplete);
-
             }
             catch (Exception ex)
             {
@@ -75,9 +73,7 @@ namespace SyncDemo.src
                 Console.WriteLine(syncError);
                 _logger.Log(syncError);
             }
-
         }
-
 
         private static bool FileEquals(string path1, string path2)
         {
@@ -91,9 +87,9 @@ namespace SyncDemo.src
 
         private static string GetFileHash(MD5 md5, string path)
         {
-            using (var sha = File.OpenRead(path))
+            using (var stream = File.OpenRead(path))
             {
-                var hashBytes = md5.ComputeHash(sha);
+                var hashBytes = md5.ComputeHash(stream);
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
             }
         }

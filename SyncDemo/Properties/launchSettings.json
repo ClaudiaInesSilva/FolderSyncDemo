@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SyncDemo": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\claud\\SyncTest\\sourceSyncTest\\test_folder\" \"C:\\Users\\claud\\SyncTest\\replicaSyncTest\" \"C:\\Users\\claud\\SyncTest\\log.txt\" \"60\"",
+      "workingDirectory": "C:\\Users\\claud\\source\\repos\\SyncDemo\\SyncDemo\\bin\\Debug\\net8.0"
+    }
+  }
+}
