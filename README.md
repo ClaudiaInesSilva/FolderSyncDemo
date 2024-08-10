@@ -5,8 +5,8 @@ This project is a C# console application designed to synchronize two folders: a 
 ## Table of Contents
 
 - [Software Requirements](#tools-used)
-- [Features](#features-reference)
-- [Set Up](#setup)
+- [Features](#features)
+- [Set Up](#set-up)
 	- [Command-Line Arguments](#command-line-arguments)
 
 ## Tools Used
@@ -40,7 +40,7 @@ The following tools were used in the development of this project:
 Clone the repository to your local machine using the following command:
 
 ```
-link
+git clone https://github.com/ClaudiaInesSilva/FolderSyncDemo.git
 ```
 
 Build the project:
@@ -53,19 +53,19 @@ dotnet build
 
 The app takes four command-line arguments:
 
---Source Path: The path to the source folder that you want to synchronize.
---Replica Path: The path to the replica folder where the source will be mirrored.
---Log File Path: The path to the log file where all operations will be logged.
---Synchronization Interval: The interval (in seconds) at which synchronization will be performed.
+- ```Source Path```: The path to the source folder that you want to synchronize.
+- ```Replica Path```: The path to the replica folder where the source will be mirrored.
+- ```Log File Path```: The path to the log file where all operations will be logged.
+- ```Synchronization Interval```: The interval (in seconds) at which synchronization will be performed.
 
 **Example Usages:**
 ```
-dotnet run -- <sourcePath> <replicaPath> <logFilePath> <syncInterval>
+dotnet run -- <Source Path> <Replica Path> <Log File Path> <Synchronization Interval>
 ```
 
 **Example Command:**
 ```
-dotnet run -- "C:\SourceFolder" "D:\ReplicaFolder" "C:\Logs\syncLog.txt" "30"
+dotnet run -- "C:\SourceFolder" "C:\ReplicaFolder" "C:\Logs\syncLog.txt" "30"
 ```
 
 In this example, the app will:
