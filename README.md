@@ -13,8 +13,8 @@ This project is a C# console application designed to synchronize two folders: a 
 
 The following tools were used in the development of this project:
 
-- **.NET SDK 8.0**: [Download from Link](https://www.l)
-- **Visual Studio 2022**: [Download from Link](https://www.)
+- [.NET SDK 8.0](https://dotnet.microsoft.com/download)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)
 
 ## Features
 
@@ -37,35 +37,45 @@ The following tools were used in the development of this project:
 
 ## Set Up
 
-Clone the repository to your local machine using the following command:
+1. Clone the repository to your local machine using the following command:
 
 ```
-link
+git clone https://github.com/ClaudiaInesSilva/FolderSyncDemo.git
 ```
 
-Build the project:
+2. Navigate to the Project Directory where the '.csproj' file is located:
+```
+cd <path-to-your-cloned-repo>\SyncDemo\SyncDemo
+```
+
+3. Build the project:
 
 ```
 dotnet build
+```
+
+4. Navigate to the Project Directory where the executable file is located: 
+```
+cd <path-to-your-cloned-repo>\SyncDemo\SyncDemo\bin\Debug\net8.0\
 ```
 
 ### Command-Line Arguments
 
 The app takes four command-line arguments:
 
---Source Path: The path to the source folder that you want to synchronize.
---Replica Path: The path to the replica folder where the source will be mirrored.
---Log File Path: The path to the log file where all operations will be logged.
---Synchronization Interval: The interval (in seconds) at which synchronization will be performed.
+- ```Source Path``` The path to the source folder that you want to synchronize.
+- ```Replica Path``` The path to the replica folder where the source will be mirrored.
+- ```Log File Path``` The path to the log file where all operations will be logged.
+- ```Synchronization Interval``` The interval (in seconds) at which synchronization will be performed. The synchronization interval must be between 10 and 3600 seconds (1 hour).
 
 **Example Usages:**
 ```
-dotnet run -- <sourcePath> <replicaPath> <logFilePath> <syncInterval>
+SyncDemo.exe <sourcePath> <replicaPath> <logFilePath> <syncInterval>
 ```
 
 **Example Command:**
 ```
-dotnet run -- "C:\SourceFolder" "D:\ReplicaFolder" "C:\Logs\syncLog.txt" "30"
+SyncDemo.exe "C:\SourceFolder" "D:\ReplicaFolder" "C:\Logs\syncLog.txt" "30"
 ```
 
 In this example, the app will:
