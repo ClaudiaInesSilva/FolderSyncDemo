@@ -1,9 +1,10 @@
 ﻿namespace SyncDemo.src
 {
-    internal class SyncTimer
+    internal class SyncTimer : IDisposable
     {
         private readonly FolderSynchronization _folderSynchronization;
         private readonly Timer _timer;
+        private bool _disposed = false;
 
         public SyncTimer(FolderSynchronization folderSynchronization, int syncInterval)
         {
@@ -14,6 +15,16 @@
         private void CallSync(object? state)
         {
             _folderSynchronization.SynchronizeFolders();
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _timer.Change(Timeout.Infinite, Timeout.Infinite);
+                _timer.Dispose();
+                _disposed = true;
+            }
         }
     }
 }
