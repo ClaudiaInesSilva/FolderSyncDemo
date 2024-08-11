@@ -3,6 +3,7 @@
     public class Logger : ILogger
     {
         private readonly string _logFilePath;
+        private readonly object _lock = new object();
 
         public Logger(string logFilePath)
         {
@@ -11,15 +12,19 @@
 
         public void Log(string message)
         {
-            var logMessage = $"[{DateTime.Now}] : {message}\n";
-            try
+
+            lock (_lock)
             {
-                Console.WriteLine(logMessage);
-                File.AppendAllText(_logFilePath, logMessage);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"LOG FILE ERROR - Failed to write to log file: {e.Message}");
+                var logMessage = $"[{DateTime.Now}] : {message}\n";
+                try
+                {
+                    Console.WriteLine(logMessage);
+                    File.AppendAllText(_logFilePath, logMessage);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"LOG FILE ERROR - Failed to write to log file: {e.Message}");
+                }
             }
         }
     }

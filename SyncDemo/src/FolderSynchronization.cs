@@ -8,6 +8,7 @@ namespace SyncDemo.src
         private readonly string _replicaPath;
         private readonly Manager _manager;
         private readonly ILogger _logger;
+        private readonly object _syncLock = new object();
 
         public FolderSynchronization(string sourcePath, string replicaPath, Manager manager, ILogger logger)
         {
@@ -19,49 +20,52 @@ namespace SyncDemo.src
 
         public void SynchronizeFolders()
         {
-            try
+            lock (_syncLock)
             {
-                if (!Directory.Exists(_replicaPath))
+                try
                 {
-                    Directory.CreateDirectory(_replicaPath);
-                    _logger.Log($"CREATE - Created Replica folder at {_replicaPath}");
-                }
-
-                var sourceFiles = Directory.GetFiles(_sourcePath, "*", SearchOption.AllDirectories);
-                var replicaFiles = Directory.GetFiles(_replicaPath, "*", SearchOption.AllDirectories);
-
-                var sourceFilesSet = new HashSet<string>(sourceFiles);
-                var replicaFilesSet = new HashSet<string>(replicaFiles);
-
-                foreach (var sourceFile in sourceFiles)
-                {
-                    var relativePath = Path.GetRelativePath(_sourcePath, sourceFile);
-                    var replicaFile = Path.Combine(_replicaPath, relativePath);
-                    var replicaDirectory = Path.GetDirectoryName(replicaFile);
-
-                    Directory.CreateDirectory(replicaDirectory!);
-
-                    if (!replicaFilesSet.Contains(replicaFile) || !FileEquals(sourceFile, replicaFile))
+                    if (!Directory.Exists(_replicaPath))
                     {
-                        _manager.CopyFile(sourceFile, replicaFile);
+                        Directory.CreateDirectory(_replicaPath);
+                        _logger.Log($"CREATE - Created Replica folder at {_replicaPath}");
                     }
-                }
 
-                foreach (var replicaFile in replicaFiles)
-                {
-                    var relativePath = Path.GetRelativePath(_replicaPath, replicaFile);
-                    var correspondingSourceFile = Path.Combine(_sourcePath, relativePath);
+                    var sourceFiles = Directory.GetFiles(_sourcePath, "*", SearchOption.AllDirectories);
+                    var replicaFiles = Directory.GetFiles(_replicaPath, "*", SearchOption.AllDirectories);
 
-                    if (!sourceFilesSet.Contains(correspondingSourceFile))
+                    var sourceFilesSet = new HashSet<string>(sourceFiles);
+                    var replicaFilesSet = new HashSet<string>(replicaFiles);
+
+                    foreach (var sourceFile in sourceFiles)
                     {
-                        _manager.DeleteFile(replicaFile);
+                        var relativePath = Path.GetRelativePath(_sourcePath, sourceFile);
+                        var replicaFile = Path.Combine(_replicaPath, relativePath);
+                        var replicaDirectory = Path.GetDirectoryName(replicaFile);
+
+                        Directory.CreateDirectory(replicaDirectory!);
+
+                        if (!replicaFilesSet.Contains(replicaFile) || !FileEquals(sourceFile, replicaFile))
+                        {
+                            _manager.CopyFile(sourceFile, replicaFile);
+                        }
                     }
+
+                    foreach (var replicaFile in replicaFiles)
+                    {
+                        var relativePath = Path.GetRelativePath(_replicaPath, replicaFile);
+                        var correspondingSourceFile = Path.Combine(_sourcePath, relativePath);
+
+                        if (!sourceFilesSet.Contains(correspondingSourceFile))
+                        {
+                            _manager.DeleteFile(replicaFile);
+                        }
+                    }
+                    _logger.Log("INFO - Synchronization complete.");
                 }
-                _logger.Log("INFO - Synchronization complete.");
-            }
-            catch (Exception ex)
-            {
-                _logger.Log($"ERROR - Error during synchronization: {ex.Message}");
+                catch (Exception ex)
+                {
+                    _logger.Log($"ERROR - Error during synchronization: {ex.Message}");
+                }
             }
         }
 
