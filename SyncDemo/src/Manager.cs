@@ -14,15 +14,11 @@
             try
             {
                 File.Copy(sourcePath, destinationPath, true);
-                var message = $"COPY - Copied file from {sourcePath} to {destinationPath}";
-                Console.WriteLine(message);
-                _logger.Log(message);
+                _logger.Log($"COPY - Copied file from {sourcePath} to {destinationPath}");
             }
             catch (Exception e)
             {
-                var errorMessage = $"ERROR - Failed to copy file {sourcePath} to {destinationPath}: {e.Message}";
-                Console.WriteLine($"{e.Message}");
-                _logger.Log(errorMessage);
+                _logger.Log($"ERROR - Failed to copy file {sourcePath} to {destinationPath}: {e.Message}");
             }
         }
 
@@ -31,15 +27,11 @@
             try
             {
                 File.Delete(path);
-                var message = $"DELETE - Deleted file {path}";
-                Console.WriteLine(message);
-                _logger.Log(message);
+                _logger.Log($"DELETE - Deleted file {path}");
             }
             catch (Exception e)
             {
-                var errorMessage = $"ERROR - Failed to delete file {path}: {e.Message}";
-                Console.WriteLine(errorMessage);
-                _logger.Log(errorMessage);
+                _logger.Log($"ERROR - Failed to delete file {path}: {e.Message}");
             }
         }
     }

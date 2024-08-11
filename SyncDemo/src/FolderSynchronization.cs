@@ -24,9 +24,7 @@ namespace SyncDemo.src
                 if (!Directory.Exists(_replicaPath))
                 {
                     Directory.CreateDirectory(_replicaPath);
-                    var replicaCreatedMessage = $"CREATE - Created Replica folder at {_replicaPath}";
-                    Console.WriteLine(replicaCreatedMessage);
-                    _logger.Log(replicaCreatedMessage);
+                    _logger.Log($"CREATE - Created Replica folder at {_replicaPath}");
                 }
 
                 var sourceFiles = Directory.GetFiles(_sourcePath, "*", SearchOption.AllDirectories);
@@ -41,10 +39,7 @@ namespace SyncDemo.src
                     var replicaFile = Path.Combine(_replicaPath, relativePath);
                     var replicaDirectory = Path.GetDirectoryName(replicaFile);
 
-                    if (!Directory.Exists(replicaDirectory))
-                    {
-                        Directory.CreateDirectory(replicaDirectory);
-                    }
+                    Directory.CreateDirectory(replicaDirectory!);
 
                     if (!replicaFilesSet.Contains(replicaFile) || !FileEquals(sourceFile, replicaFile))
                     {
@@ -62,36 +57,28 @@ namespace SyncDemo.src
                         _manager.DeleteFile(replicaFile);
                     }
                 }
-
-                var syncComplete = "INFO - Synchronization complete.";
-                Console.WriteLine(syncComplete);
-                _logger.Log(syncComplete);
+                _logger.Log("INFO - Synchronization complete.");
             }
             catch (Exception ex)
             {
-                var syncError = $"ERROR - Error during synchronization: {ex.Message}";
-                Console.WriteLine(syncError);
-                _logger.Log(syncError);
+                _logger.Log($"ERROR - Error during synchronization: {ex.Message}");
             }
         }
 
         private static bool FileEquals(string path1, string path2)
         {
-            using (var md5 = MD5.Create())
-            {
-                var hash1 = GetFileHash(md5, path1);
-                var hash2 = GetFileHash(md5, path2);
-                return hash1 == hash2;
-            }
+            using var md5 = MD5.Create();
+            var hash1 = GetFileHash(md5, path1);
+            var hash2 = GetFileHash(md5, path2);
+            return hash1 == hash2;
+
         }
 
         private static string GetFileHash(MD5 md5, string path)
         {
-            using (var stream = File.OpenRead(path))
-            {
-                var hashBytes = md5.ComputeHash(stream);
-                return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-            }
+            using var stream = File.OpenRead(path);
+            var hashBytes = md5.ComputeHash(stream);
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
         }
     }
 }
